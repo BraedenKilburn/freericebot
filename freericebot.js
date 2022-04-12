@@ -1,6 +1,6 @@
 /**
  * FreeRiceBot Javascript Function
- * Author: Nathan Tsai
+ * Author: Nathan Tsai & Braeden Kilburn
  * Last Updated: Apr 2022
  */
 
@@ -23,21 +23,17 @@ function freericebot() {
 
     // all possible answers
     // document.querySelectorAll("div.card-button")
-
-    /*** SET THIS VARIABLE BEFORE RUNNING THE BOT ***/
-    this.riceWanted = 30; // amount of rice wanted
-
-
-    this.timeout = 0;
-    this.riceDonated = parseInt(document.querySelector("div[class=rice-counter__value] span").textContent.replace(",", ""));
-    this.maxRice = this.riceDonated + this.riceWanted; // rice total desired
-    this.category = 0;
     FRBthis = this;
 
-    this.run = async function() {
+    this.run = async function(riceWanted=30) {
+        this.riceWanted = riceWanted; // amount of rice wanted (default 30 grains)
+
+        this.riceDonated = parseInt(document.querySelector("div[class=rice-counter__value] span").textContent.replace(",", ""));
+        this.goal = this.riceDonated + this.riceWanted; // total rice desired
         this.category = document.querySelector("div[class=rice-counter__category-text]").textContent;
+
         console.log("have: " + this.riceDonated + "\n");
-        console.log("want: " + this.maxRice + "\n");
+        console.log("want: " + this.goal + "\n");
 
         // run bot with 6-8 second intervals until max rice reached
         while(true) {
@@ -53,8 +49,8 @@ function freericebot() {
 
     this.getRice = function() {
         this.riceDonated = parseInt(document.querySelector("div[class=rice-counter__value] span").textContent.replace(",", ""));
-        console.log("earned: " + this.riceDonated + " / " + this.maxRice + "\n");
-        if (this.riceDonated >= this.maxRice) {
+        console.log("earned: " + this.riceDonated + " / " + this.goal + "\n");
+        if (this.riceDonated >= this.goal) {
             console.log("stopping bot");
             return 1;
         }
@@ -98,4 +94,4 @@ function freericebot() {
 }
 
 var bot = new freericebot();
-bot.run();
+bot.run(/* Insert amount of rice to donate */);
