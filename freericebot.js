@@ -35,6 +35,17 @@ function freericebot() {
         console.log("have: " + this.riceDonated + "\n");
         console.log("want: " + this.goal + "\n");
 
+        // Print estimated time to run for the desired amount of rice
+        minTime = this.getEstimatedTime(riceWanted * 6); // Min of 6 seconds per question
+        maxTime = this.getEstimatedTime(riceWanted * 8); // Max of 8 seconds per question
+
+        console.log(`This will take between ${minTime[0] != 0 ? minTime[0] + " minutes " + 
+                                            (minTime[1] != 00 ? " and " + minTime[1] + " seconds " : "") :
+                                            (minTime[1] != 00 ? minTime[1] + " seconds " : " 0 seconds ")}to ${
+                                            maxTime[0] != 0 ? maxTime[0] + " minutes " +
+                                            (maxTime[1] != 00 ? " and " + maxTime[1] + " seconds " : "") :
+                                            (minTime[1] != 00 ? minTime[1] + " seconds " : " 0 seconds ")}to complete`);
+
         // run bot with 6-8 second intervals until max rice reached
         while(true) {
             ret = FRBthis.getRice();
@@ -43,7 +54,6 @@ function freericebot() {
             }
             delay = 6000 + Math.random() * 2000;
             await sleep(delay);
-
         }
     }
 
@@ -90,6 +100,12 @@ function freericebot() {
         button = [...document.querySelectorAll("div.card-button")].filter(div => div.innerText == (answer).toString())[0]
         button.click();
         return 0;
+    }
+
+    // Returns the estimated amount of time to run the program (format: M:SS)
+    this.getEstimatedTime = s => {
+        time = (s-(s%=60))/60+(9<s?':':':0')+s
+        return time.split(":");
     }
 }
 
